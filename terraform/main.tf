@@ -11,6 +11,11 @@ provider "aws" {
 }
 
 resource "aws_instance" "demo" {
-  ami           = "ami-12345678"
+  ami           = "ami-${replace(timestamp(), ":", "")}"
   instance_type = "t2.micro"
+
+  # Force le recréation à chaque apply en ignorant les changements d'AMI
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
